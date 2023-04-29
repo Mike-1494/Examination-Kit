@@ -26,7 +26,10 @@ for label in labels:
         if filename.endswith('.jpg') or filename.endswith('.png'):
 
             img = cv2.imread(os.path.join(label_path, filename))
+
             roi = detect_human(img)
+            if roi is None:
+                continue
             roi_rgb = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
             #print(roi)
             results = pose.process(roi_rgb)
@@ -36,9 +39,12 @@ for label in labels:
                 # Extract landmark coordinates
                 for i, landmark in enumerate(results.pose_landmarks.landmark):
                     landmark_name = mp_pose.PoseLandmark(i).name.lower()
-                    if landmark.visibility >= 0.6 and landmark_name in landmark_names:
+                    if landmark.visibility >= 0.5 and landmark_name in landmark_names:    
                         landmarks.append(round(landmark.x, 5))
                         landmarks.append(round(landmark.y, 5))
+                    elif landmark_name in landmark_names:
+                        landmarks.append(100)
+                        landmarks.append(100)
                 #Angels
 
                 left_eye = results.pose_landmarks.landmark[1]
@@ -56,6 +62,6 @@ for label in labels:
                     csv_writer.writerow(landmarks)
             
             cv2.imshow("ROI: "+filename, roi)
-            cv2.waitKey(5000)
+            cv2.waitKey(100)
 
             cv2.destroyAllWindows()

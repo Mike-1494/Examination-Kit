@@ -28,7 +28,6 @@ def detect_human(frame):
     confidences = []
     class_ids = []
 
-
     for output in outputs:
         for detection in output:
 
@@ -48,6 +47,12 @@ def detect_human(frame):
                 confidences.append(float(confidence))
                 class_ids.append(class_id)
 
+                # Check if the label is 'person' and the confidence is above the threshold
+                if classes[class_id] == 'person' and confidence >= 0.6:
+                    # Crop the frame to the bounding box of the person detection
+                    frame_cut = frame[y:y+h, x:x+w] 
+                    return frame_cut
+
     # Apply non-maximum suppression to eliminate overlapping bounding boxes
     indices = cv2.dnn.NMSBoxes(boxes, confidences, conf_threshold, nms_threshold)
 
@@ -61,6 +66,6 @@ def detect_human(frame):
         cv2.rectangle(frame, (x, y), (x+w, y+h), color, 2)
         text = "{}: {:.4f}".format(label, confidence)
         cv2.putText(frame, text, (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-        frame_cut = frame[y:y+h, x:x+w] 
-    if(label == 'person'):
-        return frame_cut
+
+    # Return None if no person detection above confidence threshold was found
+    return None
