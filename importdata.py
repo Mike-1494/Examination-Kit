@@ -15,8 +15,8 @@ labels = {'cheating': 1, 'not_cheating': 0}
 
 with open(csv_file, mode='w', newline='') as f:
     csv_writer = csv.writer(f)
-    header = ['file_name', 'label', 'left_shoulder_x', 'left_shoulder_y', 'right_shoulder_x', 'right_shoulder_y', 'left_elbow_x', 'left_elbow_y', 'right_elbow_x', 'right_elbow_y', 'left_wrist_x', 'left_wrist_y', 'right_wrist_x', 'right_wrist_y', 'left_index_finger_x', 'left_index_finger_y', 'right_index_finger_x', 'right_index_finger_y', 'dx', 'dy']
-    landmark_names = ['left_shoulder', 'right_shoulder', 'left_elbow', 'right_elbow', 'left_wrist', 'right_wrist', 'left_index', 'right_index']
+    header = ['file_name', 'label', 'nose_x', 'nose_y', 'left_shoulder_x', 'left_shoulder_y', 'right_shoulder_x', 'right_shoulder_y', 'left_elbow_x', 'left_elbow_y', 'right_elbow_x', 'right_elbow_y', 'left_wrist_x', 'left_wrist_y', 'right_wrist_x', 'right_wrist_y', 'left_index_finger_x', 'left_index_finger_y', 'right_index_finger_x', 'right_index_finger_y', 'left_eye_x', 'left_eye_y', 'left_eye_z', 'right_eye_x', 'right_eye_y', 'right_eye_z']
+    landmark_names = ['nose', 'left_shoulder', 'right_shoulder', 'left_elbow', 'right_elbow', 'left_wrist', 'right_wrist', 'left_index', 'right_index']
 
     csv_writer.writerow(header)
 
@@ -40,23 +40,16 @@ for label in labels:
                         landmarks.append(round(landmark.x, 5))
                         landmarks.append(round(landmark.y, 5))
                 #Angels
-                nose = results.pose_landmarks.landmark[0]
+
                 left_eye = results.pose_landmarks.landmark[1]
                 right_eye = results.pose_landmarks.landmark[2]
-                left_shoulder = results.pose_landmarks.landmark[11] 
-                right_shoulder = results.pose_landmarks.landmark[12] 
-                left_elbow = results.pose_landmarks.landmark[13] 
-                right_elbow = results.pose_landmarks.landmark[14]
-                left_wrist = results.pose_landmarks.landmark[15]
-                right_wrist = results.pose_landmarks.landmark[16]
 
-                eye_center = ((left_eye.x + right_eye.x) / 2, (left_eye.y + right_eye.y) / 2)
-
-                dx = eye_center[0] - nose.x
-                dy = -eye_center[1] + nose.y
-                landmarks.append(round(dx, 5))
-                landmarks.append(round(dy, 5))
-
+                landmarks.append(round(left_eye.x, 5))
+                landmarks.append(round(left_eye.y, 5))
+                landmarks.append(round(left_eye.z, 5))
+                landmarks.append(round(right_eye.x, 5))
+                landmarks.append(round(right_eye.y, 5))
+                landmarks.append(round(right_eye.z, 5))
 
                 with open(csv_file, mode='a', newline='') as f:
                     csv_writer = csv.writer(f)
