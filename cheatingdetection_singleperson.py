@@ -13,7 +13,7 @@ conf_threshold = 0.7
 nms_threshold = 0.4
 
 cap = cv2.VideoCapture(0)
-
+frame_count = 0 
 while True:
     ret, frame = cap.read()
     blob = cv2.dnn.blobFromImage(frame, 1/255.0, (416, 416), swapRB=True, crop=False)
@@ -74,9 +74,12 @@ while True:
             detector = CheatingDetection()
             detector.load_data('landmarks.csv')
             detector.train_with_data()
-            cheat = detector.predict(nose.x, nose.y, left_shoulder.x, left_shoulder.y, right_shoulder.x, right_shoulder.y, left_elbow.x, left_elbow.y, right_elbow.x, right_elbow.y, left_wrist.x, left_wrist.y, right_wrist.x, right_wrist.y, left_index.x, left_index.y, right_index.x, right_index.y, left_eye.x, left_eye.y, left_eye.z, right_eye.x, right_eye.y, right_eye.z)
-            print(right_index)
-            print(cheat)
+            print("fc: ", frame_count) 
+            if frame_count % 2 == 0 :
+                cheat = detector.predict(nose.x, nose.y, left_shoulder.x, left_shoulder.y, right_shoulder.x, right_shoulder.y, left_elbow.x, left_elbow.y, right_elbow.x, right_elbow.y, left_wrist.x, left_wrist.y, right_wrist.x, right_wrist.y, left_index.x, left_index.y, right_index.x, right_index.y, left_eye.x, left_eye.y, left_eye.z, right_eye.x, right_eye.y, right_eye.z)
+                #print(right_index)
+                print(cheat)
+            frame_count += 1 
 
             for i in indices:
                 x, y, w, h = boxes[i]
@@ -88,7 +91,10 @@ while True:
                 if cheat == 1 :
                     text = "CHEATING"
                     color = (0,0,255)
-                else:   
+                elif cheat == 0.5:   
+                    text = "WARNING"
+                    color = (0,255,255)
+                else:
                     text = "NOT CHEATING"
                     color = (0,255,0)
                 cv2.rectangle(frame, (x, y), (x+w, y+h), color, 2)

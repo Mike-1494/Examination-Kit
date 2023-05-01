@@ -13,7 +13,7 @@ data_path = 'D:\CODE\COMPUTER VISION\Vision Proj\DATASET'
 csv_file = 'landmarks.csv'
 labels = {'cheating': 1, 'not_cheating': 0}
 
-with open(csv_file, mode='w', newline='') as f:
+with open(csv_file, mode='a', newline='') as f:
     csv_writer = csv.writer(f)
     header = ['file_name', 'label', 'nose_x', 'nose_y', 'left_shoulder_x', 'left_shoulder_y', 'right_shoulder_x', 'right_shoulder_y', 'left_elbow_x', 'left_elbow_y', 'right_elbow_x', 'right_elbow_y', 'left_wrist_x', 'left_wrist_y', 'right_wrist_x', 'right_wrist_y', 'left_index_finger_x', 'left_index_finger_y', 'right_index_finger_x', 'right_index_finger_y', 'left_eye_x', 'left_eye_y', 'left_eye_z', 'right_eye_x', 'right_eye_y', 'right_eye_z']
     landmark_names = ['nose', 'left_shoulder', 'right_shoulder', 'left_elbow', 'right_elbow', 'left_wrist', 'right_wrist', 'left_index', 'right_index']
